@@ -8,8 +8,6 @@ This application performs a full backup of Airtable bases using the Airtable API
 
     Backup all bases for a given Airtable account
     Save each base to a separate folder with JSON file per table
-    Supports exponential backoff for retry on API errors
-    Resumes backups if interrupted
     Logs progress, errors, and statistics
 
 
