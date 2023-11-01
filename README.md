@@ -10,6 +10,7 @@ This application performs a full backup of Airtable bases using the Airtable API
     Save each base to a separate folder with JSON file per table
     Logs progress, errors, and statistics
 
+Inspired by [airtable_full_backup](https://github.com/joe-irving/airtable_full_backup) by @joe-irving. Write in plain node.js - plz use v20.6+ version to inject .env without [dotenv](https://www.npmjs.com/package/dotenv).
 
 ## Set up
 
