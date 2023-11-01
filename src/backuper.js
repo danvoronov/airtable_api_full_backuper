@@ -27,8 +27,8 @@ module.exports.backupBase = async (backupDir, {id:baseId, name: baseName}, index
 
   const promises = [];
   for (let i = 0; i < tables.length; i++){
-    const saveFileName =  removeInvalidPathChars(tables[i].name.slice(0,tableNameMaxChars))
-    const tableRecordsFile = path.join(baseDir,saveFileName)
+    const savedFileName =  removeInvalidPathChars(tables[i].name.slice(0,tableNameMaxChars))
+    const tableRecordsFile = path.join(baseDir,savedFileName)
     promises.push(backupTables(tableRecordsFile, baseId+'/'+tables[i].id, tables[i].name));
   }
   await Promise.all(promises);
@@ -43,10 +43,15 @@ async function backupTables(tableRecordsFile, baseAndtableId, tableName) {
 
   let sdvig = '';
 
-  while (true) {   await delay();
+  while (true) {   
 
+    sameLineLog(`getting records (${tableName})...`);
+    await delay();
+    
     const apiUrl = `https://api.airtable.com/v0/${baseAndtableId}${sdvig!=''?'?offset='+sdvig:''}`
     const {records, offset} = await fetch_(apiUrl);
+
+    sameLineLog(`parsing records (${tableName})...`);    
     if (records) {
         for (var i = 0; i < records.length; i++) 
           attachments += await downloadAttachments(attachmentsDir, records[i].fields)
@@ -61,10 +66,17 @@ async function backupTables(tableRecordsFile, baseAndtableId, tableName) {
 
   }
 
+  sameLineLog('');
   log('SAVED. Records:',allRecords.length,'Attachments:',attachments, ` for '${tableName}'`);
 
   fs.writeFileSync(tableRecordsFile+'.json', JSON.stringify(allRecords, null,2));
 
+}
+
+const sameLineLog = txt => {
+  process.stdout.cursorTo(0);
+  process.stdout.clearLine(1); 
+  process.stdout.write(txt);
 }
 
 //============
