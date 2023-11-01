@@ -16,7 +16,7 @@ const {backupBase} = require('./src/backuper');
   log('Bases:', bases.length)
   fs.mkdirSync(backupDir);
 
-  const SREZ = 4 //bases.length
+  const SREZ = bases.length
   for (let i = 0; i < SREZ; i++) {
     const start = Date.now();
       await backupBase(backupDir, bases[i], i+1);
