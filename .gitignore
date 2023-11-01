@@ -1,0 +1,15 @@
+_
+*.bat
+*.sublime-*
+
+.env
+.env.test
+.env.prod
+.env.txt
+
+logs
+*.log
+.npm
+npm-debug.log*
+node_modules/
+package-lock.*
