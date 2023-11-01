@@ -9,9 +9,9 @@ const {removeInvalidPathChars} = require('./foldername');
 module.exports.downloadAttachments = async (attachmentsDir, obj) => {
   let num =0
   for (let key in obj) 
-    if (Array.isArray(obj[key])) 
+    if (Array.isArray(obj[key]) && obj[key][0] && typeof obj[key][0] === 'object') 
       for (var i = 0; i < obj[key].length; i++) 
-        if (typeof obj[key][i] === 'object' && obj[key][i].hasOwnProperty('url')) {
+        if (obj[key][i].hasOwnProperty('url')) {
 
           const attachment = obj[key][i]
           num++
