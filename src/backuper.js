@@ -23,7 +23,7 @@ module.exports.backupBase = async (backupDir, {id:baseId, name: baseName}, index
   if (tables.length==0) return null
 
   const formatedJSON = JSON.stringify(tables,null,2)
-  fs.writeFileSync(path.join(baseDir, 'metadata.json'),formatedJSON);
+  fs.writeFileSync(path.join(baseDir, '_metadata.json'),formatedJSON);
 
   const promises = [];
   for (let i = 0; i < tables.length; i++){
@@ -69,7 +69,8 @@ async function backupTables(tableRecordsFile, baseAndtableId, tableName) {
   sameLineLog('');
   log('SAVED. Records:',allRecords.length,'Attachments:',attachments, ` for '${tableName}'`);
 
-  fs.writeFileSync(tableRecordsFile+'.json', JSON.stringify(allRecords, null,2));
+  fs.writeFileSync(tableRecordsFile+'.json', JSON.stringify(allRecords, null,2), 'utf-8');
+  fs.writeFileSync(tableRecordsFile+'.csv', convertToCSV(allRecords), 'utf-8');
 
 }
 
@@ -77,6 +78,21 @@ const sameLineLog = txt => {
   process.stdout.cursorTo(0);
   process.stdout.clearLine(1); 
   process.stdout.write(txt);
+}
+
+function convertToCSV(data) {
+    const header = Object.keys(data[0]).join(',') + '\n';
+    const csv = data.map(row => {
+        return Object.values(row)
+            .map(value => {
+                if (typeof value === 'string' && value.includes(',')) {
+                    return `"${value}"`;
+                }
+                return value;
+            })
+            .join(',');
+    }).join('\n');
+    return header + csv;
 }
 
 //============
