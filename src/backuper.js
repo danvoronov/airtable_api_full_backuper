@@ -9,6 +9,7 @@ const tableNameMaxChars = 60
 
 const {removeInvalidPathChars} = require('./foldername');
 const {downloadAttachments} = require('./downloader');
+const {convertToCSV} = require('./toCSV');
 
 module.exports.backupBase = async (backupDir, {id:baseId, name: baseName}, index) => {
 
@@ -80,20 +81,6 @@ const sameLineLog = txt => {
   process.stdout.write(txt);
 }
 
-function convertToCSV(data) {
-    const header = Object.keys(data[0]).join(',') + '\n';
-    const csv = data.map(row => {
-        return Object.values(row)
-            .map(value => {
-                if (typeof value === 'string' && value.includes(',')) {
-                    return `"${value}"`;
-                }
-                return value;
-            })
-            .join(',');
-    }).join('\n');
-    return header + csv;
-}
 
 //============
 async function fetch_(apiUrl){

@@ -19,17 +19,7 @@ const {backupBase} = require('./src/backuper');
 
   const {bases} = data;
   const basesLen = bases.length
-  if (basesLen==0) return log('We got 0 bases!') 
- 
-  log('We got bases: '+basesLen+'\n');
-  fs.mkdirSync(backupDir);
-
-  for (let i = 0; i < basesLen; i += 4) {
-    const baseSlice = bases.slice(i, i + 4);
-    const baseDisplay = baseSlice.map(({name}, index) => `${i + index + 1}. [${name}]`).join(' ');
-    log(baseDisplay);
-  }
-  log('0. All Bases');
+  showBasesNamesInConsole(bases, basesLen)
 
   const consolePromt = '\nWhich base do you want to backup? \n(Enter a number from 1 to ' + basesLen + ', or 0 to backup all): '
   rl.question(consolePromt, async function(baseToBackup) {
@@ -52,6 +42,22 @@ const {backupBase} = require('./src/backuper');
   });
 
 })();
+
+//===
+
+function showBasesNamesInConsole(bases, basesLen) {
+  if (basesLen==0) return log('We got 0 bases!') 
+ 
+  log('We got bases: '+basesLen+'\n');
+  fs.mkdirSync(backupDir);
+
+  const maxLength = Math.max(...bases.map(base => base.name.length));
+  for (let i = 0; i < basesLen; i += 4) {
+    const baseSlice = bases.slice(i, i + 4);
+    const baseDisplay = baseSlice.map(({ name }, index) => `${((i + index + 1).toString()+'.').padEnd(3)} ${name.padEnd(maxLength)}`).join('    ');
+    log(baseDisplay);
+  }
+}
 
 
 async function measuredBackup(backupDir, base, num) {

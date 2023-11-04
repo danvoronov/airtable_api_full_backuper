@@ -1,13 +1,13 @@
 # Airtable API Full Backuper
 
-Backs up the record data (json), table schemas (json) and attachments. Does not back up interfaces and automations.
+Backs up the record data (json, csv), table schemas (\_metadata.json) and attachments. Does not back up interfaces and automations.
 
 This application performs a full backup of Airtable bases using the Airtable API.
 
 ## Features
 
-    Backup all bases for a given Airtable account
-    Save each base to a separate folder with JSON file per table
+    Backup one or all bases for a given Airtable account
+    Save each base to a separate folder with JSON and CSV file per table
     Logs progress, errors, and statistics
 
 Inspired by [airtable_full_backup](https://github.com/joe-irving/airtable_full_backup) by @joe-irving. Write in plain node.js - plz use v20.6+ version to inject .env without [dotenv](https://www.npmjs.com/package/dotenv).
@@ -23,12 +23,12 @@ Inspired by [airtable_full_backup](https://github.com/joe-irving/airtable_full_b
 
 ## Usage
 
-    Clone the repo
-    Set the following environment variables:
+Clone the repo
+Set the following environment variables:
 
     AIRTABLE_ACCESS_TOKEN - your Airtable API token
     BACKUP_DIR - you backup dir name
 
-    Run: npm start
+Run: npm start
 
 Backups will be saved to the backups folder. Once it is done, you can zip and upload your backup to wherever you would like to keep it.
