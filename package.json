@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "start": "node --env-file=.env airtable_backup.js"
+    "start": "node --env-file=.env airtable_backup.js",
+    "all": "node --env-file=.env airtable_backup.js --all" 
   }
 }

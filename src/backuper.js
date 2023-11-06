@@ -7,18 +7,21 @@ const headers = { 'Authorization': `Bearer ${process.env.AIRTABLE_ACCESS_TOKEN}`
 const baseNameMaxChars = 40
 const tableNameMaxChars = 60
 
+const {_mkdir} = require('./makeDir');
+
 const {removeInvalidPathChars} = require('./foldername');
 const {downloadAttachments} = require('./downloader');
 const {convertToCSV} = require('./toCSV');
+
 
 module.exports.backupBase = async (backupDir, {id:baseId, name: baseName}, index) => {
 
   const saveFileName =  removeInvalidPathChars(baseName.slice(0,baseNameMaxChars))
   const baseDir = path.join(backupDir, saveFileName+' - '+baseId);
-  fs.mkdirSync(baseDir);
+  _mkdir(baseDir);
   
   await delay();
-  const {tables} = await fetch_(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`);
+  const {tables} = await _fetch(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`);
   log(`\n[${index}] ➡️ base: '${baseName}'. Tables:`, tables.length)
 
   if (tables.length==0) return null
@@ -50,7 +53,7 @@ async function backupTables(tableRecordsFile, baseAndtableId, tableName) {
     await delay();
     
     const apiUrl = `https://api.airtable.com/v0/${baseAndtableId}${sdvig!=''?'?offset='+sdvig:''}`
-    const {records, offset} = await fetch_(apiUrl);
+    const {records, offset} = await _fetch(apiUrl);
 
     sameLineLog(`parsing records (${tableName})...`);    
     if (records) {
@@ -83,7 +86,8 @@ const sameLineLog = txt => {
 
 
 //============
-async function fetch_(apiUrl){
+
+async function _fetch(apiUrl){
    try {
     const response = await fetch(apiUrl, {headers});
     const data = await response.json();
