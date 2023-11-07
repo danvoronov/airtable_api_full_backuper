@@ -22,7 +22,7 @@ module.exports.backupBase = async (backupDir, {id:baseId, name: baseName}, index
   
   await delay();
   const {tables} = await _fetch(`https://api.airtable.com/v0/meta/bases/${baseId}/tables`);
-  log(`\n[${index}] ➡️ base: '${baseName}'. Tables:`, tables.length)
+  log(`\n${index>0?`[${index}] `:''}➡️ base: '${baseName}'. Tables:`, tables.length)
 
   if (tables.length==0) return null
 

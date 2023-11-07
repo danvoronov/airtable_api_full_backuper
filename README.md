@@ -29,6 +29,6 @@ Set the following environment variables:
     AIRTABLE_ACCESS_TOKEN - your Airtable API token
     BACKUP_DIR - you backup dir path
 
-Run: `npm start` for menu or `npm run all`
+Run: `npm start` for menu or `npm run all` for full backup or `node --env-file=.env airtable_backup.js --appXXXXXXXXXXXXXX` for backup base with ID appXXXXXXXXXXXXXX
 
 Backups will be saved to the backups folder. Once it is done, you can zip and upload your backup to wherever you would like to keep it.

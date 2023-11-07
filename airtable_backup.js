@@ -11,26 +11,54 @@ const {_mkdir} = require('./src/makeDir');
 const {menuBackup} = require('./src/menuBackup');
 const {backupBase} = require('./src/backuper');
 
+const basesAPI = 'https://api.airtable.com/v0/meta/bases';
+
 // ========================
 
-
 (async function _() {
- 
-  const response = await fetch('https://api.airtable.com/v0/meta/bases', {headers});
-  const data = await response.json();
 
-  const {bases} = data;
+  const {bases} = await checkConnection();
   const basesLen = bases.length
-  if (basesLen==0) return log('We got 0 bases!') 
+  if (basesLen==0) {
+   log('We got 0 bases!') 
+   process.exit(1); 
+  }
 
   _mkdir(process.env.BACKUP_DIR); 
   _mkdir(backupDir);
 
-  if (process.argv.includes('--all')){
+  if (process.argv.includes('--all')) {
     for (let i = 0; i < basesLen; i++) 
       await backupBase(backupDir, bases[i], i+1);
-  }
-  else
-    menuBackup(backupDir, bases)
+    process.exit(1); 
+  } 
 
+  if (process.argv.some(arg => arg.startsWith('--app'))) {
+
+    const appIdArg = process.argv.find(arg => arg.startsWith('--app'));
+    const baseToBackup = bases.find(base => base.id === appIdArg.substring(2));
+    if (baseToBackup) 
+      await backupBase(backupDir, baseToBackup, 0);
+    else 
+      log(`No base found with this ID`);
+  
+    process.exit(1);
+  } 
+  
+  menuBackup(backupDir, bases);
+  
 })();
+
+async function checkConnection() {
+  try {
+    const response = await fetch(basesAPI, {headers});
+    if(response.status === 200) {
+      return await response.json()
+    } else {
+      throw new Error('Connection status code is not 200');
+    }
+  } catch(err) {
+    console.error('Cannot connect to internet!');
+    process.exit(1);
+  }
+}
