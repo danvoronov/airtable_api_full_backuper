@@ -2,7 +2,7 @@
 
 Backs up the record data (json, csv), table schemas (\_metadata.json) and attachments. Does not back up interfaces and automations.
 
-This application performs a full backup of Airtable bases using the Airtable API.
+This node.js script performs a full or partial backup of Airtable bases using the Airtable API.
 
 ## Features
 
@@ -23,7 +23,7 @@ Inspired by [airtable_full_backup](https://github.com/joe-irving/airtable_full_b
 
 ## Usage
 
-Clone the repo
+Clone the repo.
 Set the following environment variables:
 
     AIRTABLE_ACCESS_TOKEN - your Airtable API token
